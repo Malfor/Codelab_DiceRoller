@@ -2,7 +2,7 @@ package com.example.diceroller
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.diceroller.model.Dice
 
@@ -18,16 +18,36 @@ class MainActivity : AppCompatActivity() {
 
         val rollButton: Button = findViewById(R.id.button)
         rollButton.setOnClickListener { rollDice() }
+
+        //Se inicia una imagen aleatoria cuando se abre la app.
+        rollDice()
     }
 
     /**
-     * Este metodo inicializa el textView y genera un objeto de la clase Dice
-     * luego mediante su metodo roll se le setea el resultado al textView
+     * Este metodo inicializa el imageView y genera un objeto de la clase Dice
+     * luego mediante su metodo roll se le setea el drawable al imageView
      */
     private fun rollDice() {
         val myDice = Dice(6)
-        val resultTextView: TextView = findViewById(R.id.textView)
-        resultTextView.text = myDice.roll().toString()
+        var side = myDice.roll()
+        val drawableResource = side.diceDrawableResource
+
+        val diceImage: ImageView = findViewById(R.id.imageView)
+        diceImage.setImageResource(drawableResource)
+        diceImage.contentDescription = side.toString()
     }
+
+    /**
+     * La propiedad devuelve un entero que representa el recurso de la imagen drawable
+     * para un lado segun el lado generado por el metodo roll
+     */
+    private val Int.diceDrawableResource: Int
+        get() = when (this) {
+            1 -> R.drawable.dice_1
+            2 -> R.drawable.dice_2
+            3 -> R.drawable.dice_3
+            4 -> R.drawable.dice_4
+            5 -> R.drawable.dice_5
+            else -> R.drawable.dice_6 }
 
 }
